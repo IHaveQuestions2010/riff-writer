@@ -1,3 +1,5 @@
+selectedScale = "C"
+
 baseTab = """e|---------------------------------------------------------------|
 B|---------------------------------------------------------------|
 G|---------------------------------------------------------------|
@@ -26,7 +28,8 @@ majorScalesDict = {
     "Gb": ["Gb", "Ab", "Bb", "Cb", "Db", "Eb", "F"], # Six flats
     "Cb": ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"] # Seven flats
 }
-
+#Probably won't be used
+'''
 minorScalesDict = {
     "Am": majorScalesDict["C"], # All naturals
 
@@ -46,6 +49,7 @@ minorScalesDict = {
     "Ebm": majorScalesDict["Gb"], # Six flats
     "Abm": majorScalesDict["Cb"] # Seven flats
 }
+'''
 
 def notesOnAString(string):
     offset = allNotes.index(string)
@@ -55,35 +59,47 @@ def notesOnAString(string):
         notes.append(allNotes[(note+offset)%12])
     for note in notes:
         stringPosition.append(notes.index(note))
-    return notes, stringPosition
+    return notes
 
-def noteInScale(scale, isMajor, note):
-    match isMajor:
-        case 1:
-            if note in majorScalesDict[scale]:
-                return True
-            else:
-                return False
-        case 0:
-            if note in minorScalesDict[scale]:
-                return True
-            else:
-                return False
-        case _:
-            raise Exception("something went wrong")
+def noteInScale(scale, note):
+    if note in majorScalesDict[scale]:
+        return True
+    else:
+        return False
 
-eString, eNotesPosition = notesOnAString("E")
-bString, bNotesPosition = notesOnAString("B")
-gString, gNotesPosition = notesOnAString("G")
-dString, dNotesPosition = notesOnAString("D")
-aString, aNotesPosition = notesOnAString("A")
+
+eString = notesOnAString("E")
+notesOnEString = []
+positionOnEString = []
+bString = notesOnAString("B")
+notesOnBString = []
+positionOnBString = []
+gString = notesOnAString("G")
+notesOnGString = []
+positionOnGString = []
+dString = notesOnAString("D")
+notesOnDString = []
+positionOnDString = []
+aString = notesOnAString("A")
+notesOnAString = []
+positionOnAString = []
+
+strings = [eString, bString, gString, dString, aString]
+notesOnStrings = [notesOnEString, notesOnBString, notesOnGString, notesOnDString, notesOnAString]
+positionsOnStrings = [positionOnEString, positionOnBString, positionOnGString, positionOnDString, positionOnAString]
 
 note1 = []
 position = []
 noteInScalePlacment = [note1, position]
 
-for note in eString:
-    if noteInScale("C", 1, note) == 1:
+for note in bString:
+    if noteInScale("C", note) == 1:
         note1.append(note)
-        position.append(eNotesPosition[eString.index(note)])
-print(noteInScalePlacment)
+        position.append(eString.index(note))
+
+
+for string in strings:
+    for note in string:
+        if noteInScale(selectedScale, note) == 1:
+            notesOnStrings[strings.index(string)].append(note)
+            positionsOnStrings[strings.index(string)].append(string.index(note))
