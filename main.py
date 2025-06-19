@@ -56,3 +56,34 @@ def notesOnAString(string):
     for note in notes:
         stringPosition.append(notes.index(note))
     return notes, stringPosition
+
+def noteInScale(scale, isMajor, note):
+    match isMajor:
+        case 1:
+            if note in majorScalesDict[scale]:
+                return True
+            else:
+                return False
+        case 0:
+            if note in minorScalesDict[scale]:
+                return True
+            else:
+                return False
+        case _:
+            raise Exception("something went wrong")
+
+eString, eNotesPosition = notesOnAString("E")
+bString, bNotesPosition = notesOnAString("B")
+gString, gNotesPosition = notesOnAString("G")
+dString, dNotesPosition = notesOnAString("D")
+aString, aNotesPosition = notesOnAString("A")
+
+note1 = []
+position = []
+noteInScalePlacment = [note1, position]
+
+for note in eString:
+    if noteInScale("C", 1, note) == 1:
+        note1.append(note)
+        position.append(eNotesPosition[eString.index(note)])
+print(noteInScalePlacment)
