@@ -1,15 +1,25 @@
+### Variables ###
 selected_scale = "C"
 
-base_tab = """e|---------------------------------------------------------------|
-B|---------------------------------------------------------------|
-G|---------------------------------------------------------------|
-D|---------------------------------------------------------------|
-A|---------------------------------------------------------------|
-E|---------------------------------------------------------------|"""
+string_names = ["E", "B", "G", "D", "A"]
+all_notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 
-ALL_NOTES = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
+### Functions ###
+def get_notes_on_string(open_note):
+    """Return the 12 notes on a string starting from its open note."""
+    offset = all_notes.index(open_note)
+    return [all_notes[(i + offset) % 12] for i in range(12)]
 
-MAJOR_SCALES = {
+def is_note_in_scale(scale, note):
+    """Check if a note is in the given major scale."""
+    return note in major_scales[scale]
+
+### Lists and dicts ###
+notes_per_string = {name: get_notes_on_string(name) for name in string_names}
+notes_per_strings_in_scale = {name: [] for name in string_names}
+positions_on_strings_in_scale = {name: [] for name in string_names}
+
+major_scales = {
     "C": ["C", "D", "E", "F", "G", "A", "B"], # All natural
 
     "G": ["G", "A", "B", "C", "D", "E", "F#"], # One sharp
@@ -29,54 +39,19 @@ MAJOR_SCALES = {
     "Cb": ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"] # Seven flats
 }
 
-# Probably won't be used
-'''
-MINOR_SCALES = {
-    "Am": MAJOR_SCALES["C"], # All naturals
 
-    "Em": MAJOR_SCALES["G"], # One sharp
-    "Bm": MAJOR_SCALES["D"], # Two sharps
-    "F#m": MAJOR_SCALES["A"], # Three sharps
-    "C#m": MAJOR_SCALES["E"], # Four sharps
-    "G#m": MAJOR_SCALES["B"], # Five sharps
-    "D#m": MAJOR_SCALES["F#"], # Six sharps
-    "A#m": MAJOR_SCALES["C#"], # Seven sharps
-
-    "Dm": MAJOR_SCALES["F"], # One flat
-    "Gm": MAJOR_SCALES["Bb"], # Two flats
-    "Cm": MAJOR_SCALES["Eb"], # Three flats
-    "Fm": MAJOR_SCALES["Ab"], # Four flats
-    "Bbm": MAJOR_SCALES["Db"], # Five flats
-    "Ebm": MAJOR_SCALES["Gb"], # Six flats
-    "Abm": MAJOR_SCALES["Cb"] # Seven flats
-}
-'''
-
-def get_notes_on_string(open_note):
-    """Return the 12 notes on a string starting from its open note."""
-    offset = ALL_NOTES.index(open_note)
-    return [ALL_NOTES[(i + offset) % 12] for i in range(12)]
-
-def is_note_in_scale(scale, note):
-    """Check if a note is in the given major scale."""
-    return note in MAJOR_SCALES[scale]
-
-STRING_NAMES = ["E", "B", "G", "D", "A"]
-
-notes_per_string = [get_notes_on_string(name) for name in STRING_NAMES]
-notes_on_strings_in_scale = [[] for _ in STRING_NAMES]
-positions_on_strings_in_scale = [[] for _ in STRING_NAMES]
-
-for string_idx, string_notes in enumerate(notes_per_string):
+### Loops ###
+for string_name, string_notes in notes_per_string.items():
     for fret, note in enumerate(string_notes):
         if is_note_in_scale(selected_scale, note):
-            notes_on_strings_in_scale[string_idx].append(note)
-            positions_on_strings_in_scale[string_idx].append(fret)
+            notes_per_strings_in_scale[string_name].append(note)
+            positions_on_strings_in_scale[string_name].append(fret)
 
-for string_idx, string_notes in enumerate(notes_per_string):
-    for fret, note in enumerate(string_notes):
-        if note in notes_on_strings_in_scale[string_idx]:
-            print(f"{fret}-", end="")
+for string_name in string_names:
+    print(f"{string_name}: ", end="")
+    for fret, note in enumerate(notes_per_string[string_name]):
+        if note in notes_per_strings_in_scale[string_name]:
+            print(f"{note}", end="-")
         else:
-            print("x-", end="")
-    print("")
+            print("x", end="-")
+    print()
