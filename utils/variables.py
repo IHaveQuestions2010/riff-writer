@@ -30,3 +30,6 @@ display_scale_names = {
     "C#": "Db",
     "F#": "Gb",
 }
+
+def display_note(note):
+    return display_scale_names.get(note, note)
