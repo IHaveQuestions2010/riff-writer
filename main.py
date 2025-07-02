@@ -2,9 +2,9 @@ from utils.tui import *
 
 def main():
     title()
-    operation = select_opertation()
+    operation = list_options(["Generate a tab"])
     if operation == 0:
-        select_scale()
+        list_options([display_note(n) for n in all_notes])
     elif operation == 1:
         print("wip")
 
