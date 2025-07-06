@@ -4,6 +4,8 @@ from rich.live import Live
 from rich.text import Text
 import readchar
 import pyfiglet
+import sys
+import os
 
 console = Console()
 
@@ -41,3 +43,12 @@ def list_options(options):
                 break
             live.update(render_selection(options, selected_index))
         return selected_index
+
+def clear_lines(n):
+    if n == "all":
+        os.system('cls' if os.name == 'nt' else 'clear')
+        return
+    for _ in range(n):
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
+    sys.stdout.flush()
